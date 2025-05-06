@@ -2,21 +2,142 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YouTube 片段切割</title>
+  <style>
+    /* 全局樣式 */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* 表單容器 */
+    .form-container {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    /* 標題 */
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    /* 表單組 */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    /* 標籤 */
+    label {
+      display: block;
+      color: #555;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    /* 輸入框 */
+    input[type="text"],
+    input[name="video_url"],
+    input[name="start_time"],
+    input[name="end_time"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-sizing: border-box; /* 確保 padding 和 border 不會增加元素的總寬度 */
+      font-size: 16px;
+      color: #333;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[name="video_url"]:focus,
+    input[name="start_time"]:focus,
+    input[name="end_time"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+
+    /* 提示文字 */
+    input::placeholder {
+      color: #999;
+    }
+
+    /* 按鈕 */
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 500;
+      width: 100%;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      margin-top: 10px; /* 與最後一個輸入框的間距 */
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    button[type="submit"]:active {
+      transform: scale(0.98);
+    }
+
+    /* 響應式調整 */
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      label, input, button {
+        font-size: 15px;
+      }
+      button[type="submit"] {
+        padding: 10px 15px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>YouTube 片段切割</h1>
-  <form method="post">
-    <label>影片網址(URL)：
-      <input name="video_url" required value="https://www.youtube.com/watch?v=-wiI0DwP5bY">
-    </label><br>
-    <label>開始時間(start)：
-      <input name="start_time" placeholder="MM:SS 或 HH:MM" required value="16:15">
-    </label><br>
-    <label>結束時間(end)：
-      <input name="end_time" placeholder="MM:SS 或 HH:MM" required value="18:40">
-    </label><br>
-    <button type="submit">開始切片</button>
-  </form>
+  <div class="form-container">
+    <h1>YouTube 片段切割</h1>
+    <form method="post">
+      <div class="form-group">
+        <label for="video_url">影片網址 (URL)：</label>
+        <input type="text" id="video_url" name="video_url" required value="https://www.youtube.com/watch?v=-wiI0DwP5bY">
+      </div>
+      <div class="form-group">
+        <label for="start_time">開始時間 (start)：</label>
+        <input type="text" id="start_time" name="start_time" placeholder="MM:SS 或 HH:MM:SS" required value="18:35">
+      </div>
+      <div class="form-group">
+        <label for="end_time">結束時間 (end)：</label>
+        <input type="text" id="end_time" name="end_time" placeholder="MM:SS 或 HH:MM:SS" required value="18:40">
+      </div>
+      <button type="submit">開始切片</button>
+    </form>
+  </div>
 </body>
 </html>
