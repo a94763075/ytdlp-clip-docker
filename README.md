@@ -1,8 +1,4 @@
-當然，這是一份針對你這個專案的清楚、實用的 `README.md`，包括使用方式（Poetry、本地開發、Docker）與必要說明。
 
----
-
-````markdown
 # 🎬 YouTube Clipper
 
 Flask 網頁應用，可下載 YouTube 影片片段（剪輯），支援 yt-dlp、自動剪輯與 Chrome 資料夾掛載。
@@ -101,11 +97,5 @@ docker run -p 5001:5001 --rm --name my-clipper \
 
 ## 🧑‍💻 作者
 
-Created by \[Your Name] — MIT License
+Created by \[Jonah Yen] — MIT License
 
-```
-
----
-
-你是否希望我幫你加入 `Makefile` 裡的一些常用指令（例如 `make run`, `make build`）？
-```
