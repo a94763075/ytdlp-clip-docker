@@ -1,5 +1,5 @@
 # ---- 基礎映像 ----
-FROM python:3.9
+FROM python:3.9-slim
 
 # 安裝系統套件：ffmpeg、curl、make
 RUN apt-get update && \

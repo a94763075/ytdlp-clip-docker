@@ -29,11 +29,27 @@ formats:
 
 
 # 不使用 cookie 下載影片片段
-nocookie_clip:
+# --external-downloader-args 進度條只顯示 ERROR
+# --external-downloader-args "ffmpeg_i:-loglevel error" \ 
+# --external-downloader-args "-loglevel error" \
+
+nocookie_clip_old:
 	$(YTDLP) --extractor-args "youtube:player_client=web_safari" \
 		"$(VIDEO_URL)" \
 		--merge-output-format mp4 \
+		--progress-template "download:進度 %(progress._percent_str)s | 速度 %(progress._speed_str)s | 剩餘時間 %(progress._eta_str)s" \
 		--download-sections "*$(START_TIME)-$(END_TIME)" \
 		--force-keyframes-at-cuts \
 		-o "$(OUTPUT_NAME)"
 
+
+nocookie_clip:
+	$(YTDLP) --extractor-args "youtube:player_client=web_safari" \
+		"$(VIDEO_URL)" \
+		--downloader ffmpeg \
+		--external-downloader-args "-stats -loglevel warning" \
+		--merge-output-format mp4 \
+		--progress-template "download:進度 %(progress._percent_str)s | 速度 %(progress._speed_str)s | 剩餘時間 %(progress._eta_str)s" \
+		--download-sections "*$(START_TIME)-$(END_TIME)" \
+		--force-keyframes-at-cuts \
+		-o "$(OUTPUT_NAME)"
