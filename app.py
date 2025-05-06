@@ -107,10 +107,13 @@ def submit_job():
 
     except FileNotFoundError:
         # 如果 'make' 命令本身找不到
-        print(f"--- Error: 'make' command not found. Is make installed and in PATH?")
+        print("--- Error: 'make' command not found. Is make installed and in PATH?")
         return (
             jsonify(
-                {"status": "error", "message": f"啟動切片失敗：找不到 'make' 命令。"}
+                {
+                    "status": "error",
+                    "message": "啟動切片失敗：找不到 'make' 命令。",
+                }
             ),
             500,
         )
@@ -219,7 +222,7 @@ def check_status(job_id):
 
 
 if __name__ == "__main__":
-    print(f"--- Starting Flask server ---")
+    print("--- Starting Flask server ---")
     print(f"--- Output directory set to: {os.path.abspath(COMPLETED_DIR)}")
     # 綁定到 0.0.0.0 使其可以從外部網路訪問 (例如在 Docker 中或需要區域網路訪問時)
     # debug=True 會在程式碼變更時自動重載伺服器，並提供更詳細的錯誤頁面，生產環境中應設為 False
