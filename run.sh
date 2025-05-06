@@ -14,5 +14,6 @@ fi
 # 啟動新的 container
 docker run -p 5001:5001 --rm --name my-clipper \
   -v "$(pwd)/downloads:/app/downloads" \
+  -v "$(pwd)/completed_clips:/app/completed_clips" \
   -e FLASK_SECRET_KEY='your_very_secret_random_key' \
   yt-clipper

@@ -10,6 +10,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f0f2f5;
       display: flex;
+      flex-direction: column; /* Allow status message below form */
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -26,6 +27,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 500px;
+      margin-bottom: 20px; /* Space for status message */
     }
 
     /* 標題 */
@@ -60,7 +62,7 @@
       padding: 12px 15px;
       border: 1px solid #ddd;
       border-radius: 6px;
-      box-sizing: border-box; /* 確保 padding 和 border 不會增加元素的總寬度 */
+      box-sizing: border-box;
       font-size: 16px;
       color: #333;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -75,12 +77,10 @@
       outline: none;
     }
 
-    /* 提示文字 */
     input::placeholder {
       color: #999;
     }
 
-    /* 按鈕 */
     button[type="submit"] {
       background-color: #007bff;
       color: white;
@@ -91,19 +91,51 @@
       font-size: 18px;
       font-weight: 500;
       width: 100%;
-      transition: background-color 0.3s ease, transform 0.1s ease;
-      margin-top: 10px; /* 與最後一個輸入框的間距 */
+      transition: background-color 0.3s ease, transform 0.1s ease, opacity 0.3s ease;
+      margin-top: 10px;
     }
 
-    button[type="submit"]:hover {
+    button[type="submit"]:hover:not(:disabled) {
       background-color: #0056b3;
     }
 
-    button[type="submit"]:active {
+    button[type="submit"]:active:not(:disabled) {
       transform: scale(0.98);
     }
+    
+    button[type="submit"]:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
 
-    /* 響應式調整 */
+    /* 狀態消息區域 */
+    #statusMessage {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      width: 100%;
+      max-width: 480px; /* Match form width roughly */
+      box-sizing: border-box;
+    }
+    #statusMessage.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    #statusMessage.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    #statusMessage.info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+
     @media (max-width: 600px) {
       .form-container {
         padding: 20px;
@@ -117,13 +149,16 @@
       button[type="submit"] {
         padding: 10px 15px;
       }
+      #statusMessage {
+        max-width: calc(100% - 40px);
+      }
     }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h1>YouTube 片段切割</h1>
-    <form method="post">
+    <form id="clipForm">
       <div class="form-group">
         <label for="video_url">影片網址 (URL)：</label>
         <input type="text" id="video_url" name="video_url" required value="https://www.youtube.com/watch?v=-wiI0DwP5bY">
@@ -136,8 +171,105 @@
         <label for="end_time">結束時間 (end)：</label>
         <input type="text" id="end_time" name="end_time" placeholder="MM:SS 或 HH:MM:SS" required value="18:40">
       </div>
-      <button type="submit">開始切片</button>
+      <button type="submit" id="submitButton">開始切片</button>
     </form>
   </div>
+  <div id="statusMessage"></div>
+
+  <script>
+    const clipForm = document.getElementById('clipForm');
+    const submitButton = document.getElementById('submitButton');
+    const statusMessageDiv = document.getElementById('statusMessage');
+    let jobPollingInterval = null;
+
+    clipForm.addEventListener('submit', async function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const videoUrl = document.getElementById('video_url').value;
+      const startTime = document.getElementById('start_time').value;
+      const endTime = document.getElementById('end_time').value;
+
+      if (!videoUrl || !startTime || !endTime) {
+        updateStatus("請填入所有欄位！", "error");
+        return;
+      }
+
+      submitButton.disabled = true;
+      updateStatus("正在提交請求...", "info");
+
+      try {
+        const response = await fetch('/submit_job', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            video_url: videoUrl,
+            start_time: startTime,
+            end_time: endTime,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.job_id) {
+          updateStatus(data.message || "處理中...", "info");
+          pollJobStatus(data.job_id);
+        } else {
+          updateStatus(data.message || "提交失敗，請稍後再試。", "error");
+          submitButton.disabled = false;
+        }
+      } catch (error) {
+        console.error("Submit error:", error);
+        updateStatus("提交請求時發生錯誤，請檢查網路連線。", "error");
+        submitButton.disabled = false;
+      }
+    });
+
+    function pollJobStatus(jobId) {
+      if (jobPollingInterval) {
+        clearInterval(jobPollingInterval);
+      }
+
+      jobPollingInterval = setInterval(async () => {
+        try {
+          const response = await fetch(`/check_status/${jobId}`);
+          if (!response.ok) {
+            // Handle HTTP errors like 404 if job ID is suddenly invalid
+            const errorData = await response.json().catch(() => ({ message: "無法獲取狀態，伺服器錯誤。" }));
+            updateStatus(errorData.message || `檢查狀態失敗 (${response.status})`, "error");
+            clearInterval(jobPollingInterval);
+            submitButton.disabled = false;
+            return;
+          }
+          
+          const data = await response.json();
+          updateStatus(data.message, data.status === 'completed' || data.status === 'success' ? 'success' : (data.status === 'processing' ? 'info' : 'error'));
+
+          if (data.status !== 'processing') {
+            clearInterval(jobPollingInterval);
+            submitButton.disabled = false;
+            if (data.status === 'completed' && data.filename) {
+                // Optionally, you could add a download link or further actions here
+                console.log("Completed file:", data.filename);
+            }
+          }
+        } catch (error) {
+          console.error("Polling error:", error);
+          updateStatus("檢查進度時發生網路錯誤。", "error");
+          clearInterval(jobPollingInterval);
+          submitButton.disabled = false;
+        }
+      }, 5000); // Poll every 5 seconds
+    }
+
+    function updateStatus(message, type) {
+      statusMessageDiv.textContent = message;
+      statusMessageDiv.className = ''; // Clear existing classes
+      if (type) {
+        statusMessageDiv.classList.add(type);
+      }
+    }
+  </script>
 </body>
 </html>
