@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, jsonify, url_for
+from flask import Flask, render_template, request, jsonify
 import subprocess
 import os
 import uuid  # 用於產生獨特的任務 ID
-import time
 
 # --- 設定 ---
 # 取得此腳本所在的目錄
@@ -117,7 +116,15 @@ def submit_job():
         )
     except Exception as e:
         print(f"--- Error: Failed to start job {job_id}: {e}")
-        return jsonify({"status": "error", "message": f"啟動切片失敗：{str(e)}"}), 500
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": f"啟動切片失敗：{str(e)}",
+                },
+            ),
+            500,
+        )
 
 
 @app.route("/check_status/<job_id>", methods=["GET"])
