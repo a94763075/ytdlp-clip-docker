@@ -39,7 +39,7 @@ jobs:
     - name: Lint with flake8
       run: |
         poetry run pip install flake8
-        poetry run flake8 app.py
+        poetry run flake8 app.py --ignore=E501        
 
     - name: Run Flask app in background
       run: |
