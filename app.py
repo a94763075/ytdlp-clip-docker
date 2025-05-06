@@ -195,7 +195,7 @@ def check_status(job_id):
             )
 
         else:  # return_code != 0
-            final_message = f"切片失敗。錯誤碼：{return_code}。請檢查終端機中的 'make' 命令輸出或伺服器日誌獲取詳細資訊。"
+            final_message = f"切片失敗。錯誤碼：{return_code}。請檢查終端機中的 'make' 命令輸出或伺服器日誌獲取詳細資訊。 可以換個“網路 IP” 試試看 或等一個小時後再試試看 或先測試其他影片可否下載"
             job["status"] = "failed"
             print(f"--- Error: Job {job_id} failed with return code {return_code}.")
 
