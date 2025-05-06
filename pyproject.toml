@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "youtube_clip"
+version = "0.1.0"
+description = ""
+authors = ["a94763075 <a94763075@163.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.14"
+yt-dlp = "^2025.3.31"
+flask = "^3.0.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube 片段切割</title>
+</head>
+<body>
+  <h1>YouTube 片段切割</h1>
+  <form method="post">
+    <label>影片網址(URL)：
+      <input name="video_url" required value="https://www.youtube.com/watch?v=-wiI0DwP5bY">
+    </label><br>
+    <label>開始時間(start)：
+      <input name="start_time" placeholder="MM:SS 或 HH:MM" required value="16:15">
+    </label><br>
+    <label>結束時間(end)：
+      <input name="end_time" placeholder="MM:SS 或 HH:MM" required value="18:40">
+    </label><br>
+    <button type="submit">開始切片</button>
+  </form>
+</body>
+</html>
