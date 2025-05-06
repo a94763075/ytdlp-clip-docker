@@ -27,7 +27,7 @@ COPY templates/ ./templates/
 
 
 # 暴露 Flask 預設 port
-EXPOSE 5000
+EXPOSE 5001
 
 # 預設啟動：使用 poetry run 來啟動 Flask
 ENTRYPOINT ["poetry", "run", "python", "app.py"]
