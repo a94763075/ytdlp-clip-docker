@@ -22,9 +22,12 @@ def index():
             return redirect(url_for("index"))
 
         # 在 container 裡執行 Makefile 裡的 clip 目標
+
+        # "nocookie_clip", 先不使用 cookie
+
         cmd = [
             "make",
-            "clip",
+            "nocookie_clip",
             f"VIDEO_URL={url}",
             f"START_TIME={start}",
             f"END_TIME={end}",

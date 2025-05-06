@@ -59,6 +59,14 @@ docker run -p 5001:5001 --rm --name my-clipper \
   yt-clipper
 ```
 
+不使用 cookie
+```bash
+docker run -p 5001:5001 --rm --name my-clipper \
+  -v "$(pwd)/downloads:/app/downloads" \
+  -e FLASK_SECRET_KEY='your_very_secret_random_key' \
+  yt-clipper
+```
+
 * 將 YouTube cookies（例如登入憑證）從本地 Chrome 資料夾掛載進容器，以支援私人影片或高齡限制。
 * 所有下載的影片會儲存在本機的 `downloads/` 資料夾中。
 
