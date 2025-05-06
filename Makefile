@@ -2,7 +2,7 @@
 VIDEO_URL = https://www.youtube.com/watch?v=-wiI0DwP5bY
 START_TIME = 16:15
 END_TIME = 18:40
-OUTPUT_NAME = 回放片段_$(subst :, -, $(START_TIME))_to_$(subst :, -, $(END_TIME)).mp4
+OUTPUT_NAME = downloads/回放片段_$(subst :, -, $(START_TIME))_to_$(subst :, -, $(END_TIME)).mp4
 
 # yt-dlp 執行路徑 (在 poetry 虛擬環境中)
 YTDLP = poetry run yt-dlp
