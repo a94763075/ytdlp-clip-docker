@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory, abort
 from werkzeug.utils import safe_join
-import subprocess, os, uuid
+import subprocess
+import os
+import uuid
+from flask import Flask, render_template, request, jsonify, send_from_directory, abort
+
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 COMPLETED_DIR = os.path.join(SCRIPT_DIR, "completed_clips")
@@ -116,4 +119,4 @@ def download(filename):
 # ──────────────────────────────
 if __name__ == "__main__":
     print("⇢ 伺服器啟動 http://localhost:5001")
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=False)
