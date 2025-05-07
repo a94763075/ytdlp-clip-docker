@@ -161,15 +161,15 @@
     <form id="clipForm">
       <div class="form-group">
         <label for="video_url">影片網址 (URL)：</label>
-        <input type="text" id="video_url" name="video_url" required value="https://www.youtube.com/watch?v=-wiI0DwP5bY">
+        <input type="text" id="video_url" name="video_url" required />
       </div>
       <div class="form-group">
         <label for="start_time">開始時間 (start)：</label>
-        <input type="text" id="start_time" name="start_time" placeholder="MM:SS 或 HH:MM:SS" required value="18:35">
+        <input type="text" id="start_time" name="start_time" placeholder="MM:SS 或 HH:MM:SS" required />
       </div>
       <div class="form-group">
         <label for="end_time">結束時間 (end)：</label>
-        <input type="text" id="end_time" name="end_time" placeholder="MM:SS 或 HH:MM:SS" required value="18:40">
+        <input type="text" id="end_time" name="end_time" placeholder="MM:SS 或 HH:MM:SS" required />
       </div>
       <button type="submit" id="submitButton">開始切片</button>
     </form>
@@ -182,94 +182,80 @@
     const statusMessageDiv = document.getElementById('statusMessage');
     let jobPollingInterval = null;
 
-    clipForm.addEventListener('submit', async function(event) {
-      event.preventDefault(); // Prevent default form submission
-
-      const videoUrl = document.getElementById('video_url').value;
-      const startTime = document.getElementById('start_time').value;
-      const endTime = document.getElementById('end_time').value;
-
-      if (!videoUrl || !startTime || !endTime) {
-        updateStatus("請填入所有欄位！", "error");
+    clipForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        video_url: document.getElementById('video_url').value.trim(),
+        start_time: document.getElementById('start_time').value.trim(),
+        end_time: document.getElementById('end_time').value.trim()
+      };
+      if (!payload.video_url || !payload.start_time || !payload.end_time) {
+        updateStatus('請填入所有欄位！', 'error');
         return;
       }
-
       submitButton.disabled = true;
-      updateStatus("正在提交請求...", "info");
+      updateStatus('正在提交請求…', 'info');
 
       try {
-        const response = await fetch('/submit_job', {
+        const res = await fetch('/submit_job', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            video_url: videoUrl,
-            start_time: startTime,
-            end_time: endTime,
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || '提交失敗');
 
-        const data = await response.json();
-
-        if (response.ok && data.job_id) {
-          updateStatus(data.message || "處理中...", "info");
-          pollJobStatus(data.job_id);
-        } else {
-          updateStatus(data.message || "提交失敗，請稍後再試。", "error");
-          submitButton.disabled = false;
-        }
-      } catch (error) {
-        console.error("Submit error:", error);
-        updateStatus("提交請求時發生錯誤，請檢查網路連線。", "error");
+        updateStatus(data.message || '處理中…', 'info');
+        pollJobStatus(data.job_id);
+      } catch (err) {
+        updateStatus('提交失敗：' + err.message, 'error');
         submitButton.disabled = false;
       }
     });
 
     function pollJobStatus(jobId) {
-      if (jobPollingInterval) {
-        clearInterval(jobPollingInterval);
-      }
-
+      if (jobPollingInterval) clearInterval(jobPollingInterval);
       jobPollingInterval = setInterval(async () => {
         try {
-          const response = await fetch(`/check_status/${jobId}`);
-          if (!response.ok) {
-            // Handle HTTP errors like 404 if job ID is suddenly invalid
-            const errorData = await response.json().catch(() => ({ message: "無法獲取狀態，伺服器錯誤。" }));
-            updateStatus(errorData.message || `檢查狀態失敗 (${response.status})`, "error");
-            clearInterval(jobPollingInterval);
-            submitButton.disabled = false;
-            return;
-          }
-          
-          const data = await response.json();
-          updateStatus(data.message, data.status === 'completed' || data.status === 'success' ? 'success' : (data.status === 'processing' ? 'info' : 'error'));
+          const res = await fetch(`/check_status/${jobId}`);
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || '查詢失敗');
+          updateStatus(data.message, data.status === 'processing' ? 'info'
+                                                                  : (data.status === 'completed' ? 'success' : 'error'));
 
           if (data.status !== 'processing') {
             clearInterval(jobPollingInterval);
             submitButton.disabled = false;
+
             if (data.status === 'completed' && data.filename) {
-                // Optionally, you could add a download link or further actions here
-                console.log("Completed file:", data.filename);
+              const link = document.createElement('a');
+              link.href = `/download/${encodeURIComponent(data.filename)}`;
+              link.textContent = `⬇ 下載：${data.filename}`;
+              link.download = data.filename;
+              link.style.display = 'block';
+              link.style.marginTop = '12px';
+              link.style.fontWeight = 'bold';
+              link.style.color = '#007bff';
+              statusMessageDiv.appendChild(link);
+
+              /* 若想自動觸發下載（非必要）：
+                 // setTimeout(() => { window.location = link.href; }, 800);
+              */
             }
           }
-        } catch (error) {
-          console.error("Polling error:", error);
-          updateStatus("檢查進度時發生網路錯誤。", "error");
+        } catch (err) {
+          updateStatus('輪詢錯誤：' + err.message, 'error');
           clearInterval(jobPollingInterval);
           submitButton.disabled = false;
         }
-      }, 5000); // Poll every 5 seconds
+      }, 4000);
     }
 
-    function updateStatus(message, type) {
-      statusMessageDiv.textContent = message;
-      statusMessageDiv.className = ''; // Clear existing classes
-      if (type) {
-        statusMessageDiv.classList.add(type);
-      }
+    function updateStatus(msg, type) {
+      statusMessageDiv.textContent = msg;
+      statusMessageDiv.className = type || '';
     }
   </script>
 </body>
+
 </html>
