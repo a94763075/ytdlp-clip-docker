@@ -13,35 +13,74 @@
     }
 
     /* 全局樣式 */
+    :root {
+      --bg-gradient-light: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --bg-gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --card-bg-light: rgba(255, 255, 255, 0.95);
+      --card-bg-dark: rgba(15, 23, 42, 0.95);
+      --text-color-light: #2c3e50;
+      --text-color-dark: #e2e8f0;
+      --border-color-light: rgba(255, 255, 255, 0.2);
+      --border-color-dark: rgba(255, 255, 255, 0.1);
+      --input-border-light: #e5e7eb;
+      --input-border-dark: #334155;
+      --input-bg-light: rgba(255, 255, 255, 0.8);
+      --input-bg-dark: rgba(30, 41, 59, 0.8);
+      --primary-color: #3b82f6;
+      --primary-dark: #2563eb;
+      --primary-darker: #1d4ed8;
+      --accent-gradient: linear-gradient(90deg, #3b82f6, #60a5fa);
+      --button-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --card-shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s ease;
+    }
+
     body {
       font-family: 'Noto Sans TC', 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: var(--bg-gradient-light);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 20px;
-      color: #2c3e50;
+      color: var(--text-color-light);
+      transition: var(--transition);
+    }
+
+    body.dark-mode {
+      background: var(--bg-gradient-dark);
+      color: var(--text-color-dark);
     }
 
     /* 表單容器 */
     .form-container {
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: var(--card-bg-light);
       padding: 35px 40px;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      box-shadow: var(--card-shadow);
       width: 100%;
       max-width: 520px;
       margin-bottom: 25px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: var(--transition);
+      border: 1px solid var(--border-color-light);
       backdrop-filter: blur(5px);
+    }
+
+    .dark-mode .form-container {
+      background-color: var(--card-bg-dark);
+      box-shadow: var(--card-shadow-dark);
+      border: 1px solid var(--border-color-dark);
     }
 
     .form-container:hover {
       transform: translateY(-5px);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .dark-mode .form-container:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
     }
 
     /* 標題 */
@@ -55,6 +94,10 @@
       padding-bottom: 12px;
     }
 
+    .dark-mode h1 {
+      color: #60a5fa;
+    }
+
     h1::after {
       content: '';
       position: absolute;
@@ -63,7 +106,7 @@
       transform: translateX(-50%);
       width: 60px;
       height: 4px;
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      background: var(--accent-gradient);
       border-radius: 2px;
     }
 
@@ -83,8 +126,16 @@
       transition: color 0.3s ease;
     }
 
+    .dark-mode label {
+      color: #94a3b8;
+    }
+
     .form-group:focus-within label {
       color: #2563eb;
+    }
+
+    .dark-mode .form-group:focus-within label {
+      color: #60a5fa;
     }
 
     /* 輸入框 */
@@ -94,27 +145,49 @@
     input[name="end_time"] {
       width: 100%;
       padding: 14px 16px;
-      border: 2px solid #e5e7eb;
+      border: 2px solid var(--input-border-light);
       border-radius: 10px;
       font-size: 16px;
       color: #374151;
-      transition: all 0.3s ease;
-      background-color: rgba(255, 255, 255, 0.8);
+      transition: var(--transition);
+      background-color: var(--input-bg-light);
+    }
+
+    .dark-mode input[type="text"],
+    .dark-mode input[name="video_url"],
+    .dark-mode input[name="start_time"],
+    .dark-mode input[name="end_time"] {
+      border-color: var(--input-border-dark);
+      background-color: var(--input-bg-dark);
+      color: #e2e8f0;
     }
 
     input[type="text"]:focus,
     input[name="video_url"]:focus,
     input[name="start_time"]:focus,
     input[name="end_time"]:focus {
-      border-color: #3b82f6;
+      border-color: var(--primary-color);
       box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
       outline: none;
       background-color: #fff;
     }
 
+    .dark-mode input[type="text"]:focus,
+    .dark-mode input[name="video_url"]:focus,
+    .dark-mode input[name="start_time"]:focus,
+    .dark-mode input[name="end_time"]:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+      background-color: rgba(30, 41, 59, 0.95);
+    }
+
     input::placeholder {
       color: #9ca3af;
       font-size: 14px;
+    }
+
+    .dark-mode input::placeholder {
+      color: #64748b;
     }
 
     /* 圖示 */
@@ -126,6 +199,10 @@
       font-size: 18px;
       color: #9ca3af;
       pointer-events: none;
+    }
+
+    .dark-mode .form-group::before {
+      color: #64748b;
     }
 
     .form-group:nth-of-type(1)::before {
@@ -141,7 +218,8 @@
     }
 
     /* 按鈕 */
-    button[type="submit"] {
+    button[type="submit"], 
+    .btn {
       background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       color: white;
       padding: 14px 20px;
@@ -151,27 +229,72 @@
       font-size: 17px;
       font-weight: 600;
       width: 100%;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       margin-top: 10px;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      box-shadow: var(--button-shadow);
     }
 
-    button[type="submit"]:hover:not(:disabled) {
+    .btn-secondary {
+      background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover:not(:disabled),
+    .btn:hover:not(:disabled) {
       background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
       transform: translateY(-2px);
     }
 
-    button[type="submit"]:active:not(:disabled) {
+    .btn-secondary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #475569 0%, #334155 100%);
+      box-shadow: 0 6px 15px rgba(71, 85, 105, 0.4);
+    }
+
+    button[type="submit"]:active:not(:disabled),
+    .btn:active:not(:disabled) {
       transform: scale(0.98) translateY(0);
       box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
     }
     
-    button[type="submit"]:disabled {
+    button[type="submit"]:disabled,
+    .btn:disabled {
       background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
       cursor: not-allowed;
       opacity: 0.7;
+    }
+
+    /* 浮動操作按鈕 */
+    .floating-actions {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .float-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 20px;
+    }
+
+    .float-btn:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
     }
 
     /* 狀態消息區域 */
@@ -186,7 +309,11 @@
       position: relative;
       animation: fadeIn 0.3s ease;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
+      transition: var(--transition);
+    }
+
+    .dark-mode #statusMessage {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     @keyframes fadeIn {
@@ -200,15 +327,33 @@
       border-left: 5px solid #10b981;
     }
 
+    .dark-mode #statusMessage.success {
+      background-color: rgba(6, 95, 70, 0.2);
+      color: #34d399;
+      border-left: 5px solid #10b981;
+    }
+
     #statusMessage.error {
       background-color: #fef2f2;
       color: #991b1b;
       border-left: 5px solid #ef4444;
     }
 
+    .dark-mode #statusMessage.error {
+      background-color: rgba(153, 27, 27, 0.2);
+      color: #f87171;
+      border-left: 5px solid #ef4444;
+    }
+
     #statusMessage.info {
       background-color: #eff6ff;
       color: #1e40af;
+      border-left: 5px solid #3b82f6;
+    }
+
+    .dark-mode #statusMessage.info {
+      background-color: rgba(30, 64, 175, 0.2);
+      color: #60a5fa;
       border-left: 5px solid #3b82f6;
     }
 
@@ -221,7 +366,12 @@
       background-color: #e0f2fe;
       padding: 10px 18px;
       border-radius: 8px;
-      transition: all 0.2s ease;
+      transition: var(--transition);
+    }
+
+    .dark-mode #statusMessage a {
+      color: #60a5fa;
+      background-color: rgba(224, 242, 254, 0.15);
     }
 
     #statusMessage a:hover {
@@ -230,11 +380,328 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* 動畫效果 */
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
+    .dark-mode #statusMessage a:hover {
+      background-color: rgba(191, 219, 254, 0.25);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 進度條 */
+    .progress-container {
+      width: 100%;
+      background-color: #e5e7eb;
+      height: 10px;
+      border-radius: 5px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .dark-mode .progress-container {
+      background-color: #334155;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
+
+    /* 預覽與計時顯示 */
+    .preview-container {
+      margin-top: 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #videoPreview {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: none;
+      max-height: 240px;
+      object-fit: contain;
+      background-color: #000;
+    }
+
+    .dark-mode #videoPreview {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .time-info {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #4b5563;
+      padding: 8px 12px;
+      background-color: #f9fafb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dark-mode .time-info {
+      color: #94a3b8;
+      background-color: #1e293b;
+    }
+
+    .time-info span {
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    .dark-mode .time-info span {
+      color: #60a5fa;
+    }
+
+    /* 歷史記錄面板 */
+    .history-panel {
+      position: fixed;
+      right: -350px;
+      top: 0;
+      width: 350px;
+      height: 100vh;
+      background-color: white;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+      transition: right 0.4s ease;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 25px;
+    }
+
+    .dark-mode .history-panel {
+      background-color: #0f172a;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .history-panel.open {
+      right: 0;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dark-mode .history-header {
+      border-bottom: 1px solid #334155;
+    }
+
+    .history-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .dark-mode .history-header h2 {
+      color: #60a5fa;
+    }
+
+    .close-history {
+      border: none;
+      background: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+      transition: var(--transition);
+    }
+
+    .dark-mode .close-history {
+      color: #94a3b8;
+    }
+
+    .close-history:hover {
+      color: #ef4444;
+      transform: scale(1.1);
+    }
+
+    .history-items {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .history-item {
+      background-color: #f9fafb;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+
+    .dark-mode .history-item {
+      background-color: #1e293b;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+
+    .history-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .history-item:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .history-item h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1e3a8a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dark-mode .history-item h3 {
+      color: #60a5fa;
+    }
+
+    .history-meta {
+      font-size: 0.85rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .dark-mode .history-meta {
+      color: #94a3b8;
+    }
+
+    .history-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .history-btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background-color: #eff6ff;
+      color: #2563eb;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .dark-mode .history-btn {
+      background-color: rgba(239, 246, 255, 0.1);
+      color: #60a5fa;
+    }
+
+    .history-btn:hover {
+      background-color: #dbeafe;
+      transform: translateY(-2px);
+    }
+
+    .dark-mode .history-btn:hover {
+      background-color: rgba(219, 234, 254, 0.2);
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Tool 提示 */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 140px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -70px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 12px;
+      font-weight: normal;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .dark-mode .tooltip .tooltiptext {
+      background-color: #1e293b;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    .dark-mode .tooltip .tooltiptext::after {
+      border-color: #1e293b transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Format validation feedback */
+    .format-feedback {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #9ca3af;
+      transition: var(--transition);
+    }
+
+    .dark-mode .format-feedback {
+      color: #64748b;
+    }
+
+    .format-valid {
+      color: #10b981;
+    }
+
+    .dark-mode .format-valid {
+      color: #34d399;
+    }
+
+    .format-invalid {
+      color: #ef4444;
+    }
+
+    .dark-mode .format-invalid {
+      color: #f87171;
     }
 
     /* Logo動畫 */
@@ -252,6 +719,14 @@
       -webkit-text-fill-color: transparent;
       font-size: 45px;
       margin-right: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    /* 動畫效果 */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
 
     /* 響應式設計 */
@@ -283,6 +758,11 @@
         top: 38px;
         font-size: 16px;
       }
+
+      .history-panel {
+        width: 100%;
+        right: -100%;
+      }
     }
   </style>
 </head>
@@ -296,36 +776,123 @@
       <div class="form-group">
         <label for="video_url">影片網址 (URL)</label>
         <input type="text" id="video_url" name="video_url" required value="https://www.youtube.com/watch?v=-wiI0DwP5bY" placeholder="貼上 YouTube 影片連結">
+        <div id="urlFeedback" class="format-feedback"></div>
       </div>
       <div class="form-group">
         <label for="start_time">開始時間 (Start)</label>
         <input type="text" id="start_time" name="start_time" placeholder="例如: 01:25 或 01:25:30" required value="18:35">
+        <div id="startFeedback" class="format-feedback"></div>
       </div>
       <div class="form-group">
         <label for="end_time">結束時間 (End)</label>
         <input type="text" id="end_time" name="end_time" placeholder="例如: 01:35 或 01:35:45" required value="18:40">
+        <div id="endFeedback" class="format-feedback"></div>
       </div>
+      <div class="time-info">
+        預計切割時長: <span id="clipDuration">00:05</span>
+      </div>
+
+      <div class="preview-container">
+        <button type="button" id="previewBtn" class="btn btn-secondary">預覽影片</button>
+        <video id="videoPreview" controls></video>
+      </div>
+
       <button type="submit" id="submitButton">開始切片</button>
     </form>
   </div>
   <div id="statusMessage"></div>
 
+  <!-- 歷史記錄 -->
+  <div class="history-panel" id="historyPanel">
+    <div class="history-header">
+      <h2>剪輯歷史</h2>
+      <button class="close-history" id="closeHistory">×</button>
+    </div>
+    <div class="history-items" id="historyItems">
+      <!-- 歷史記錄項目會在這裡動態添加 -->
+    </div>
+  </div>
+
+  <!-- 背景覆蓋層 -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- 浮動按鈕 -->
+  <div class="floating-actions">
+    <button class="float-btn tooltip" id="darkModeToggle" aria-label="切換深色模式">
+      🌙
+      <span class="tooltiptext">切換深色模式</span>
+    </button>
+    <button class="float-btn tooltip" id="historyBtn" aria-label="查看歷史">
+      📋
+      <span class="tooltiptext">查看歷史</span>
+    </button>
+  </div>
+
   <script>
+    // DOM元素
     const clipForm = document.getElementById('clipForm');
     const submitButton = document.getElementById('submitButton');
     const statusMessageDiv = document.getElementById('statusMessage');
-    let jobPollingInterval = null;
+    const videoUrlInput = document.getElementById('video_url');
+    const startTimeInput = document.getElementById('start_time');
+    const endTimeInput = document.getElementById('end_time');
+    const clipDurationSpan = document.getElementById('clipDuration');
+    const previewBtn = document.getElementById('previewBtn');
+    const videoPreview = document.getElementById('videoPreview');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const historyBtn = document.getElementById('historyBtn');
+    const historyPanel = document.getElementById('historyPanel');
+    const closeHistory = document.getElementById('closeHistory');
+    const overlay = document.getElementById('overlay');
+    const historyItems = document.getElementById('historyItems');
+    const urlFeedback = document.getElementById('urlFeedback');
+    const startFeedback = document.getElementById('startFeedback');
+    const endFeedback = document.getElementById('endFeedback');
 
-    clipForm.addEventListener('submit', async (e) => {
+    let jobPollingInterval = null;
+    let processingProgress = 0;
+    let progressInterval = null;
+    let history = JSON.parse(localStorage.getItem('clipHistory') || '[]');
+
+    // 初始化頁面
+    function init() {
+      loadDarkModePreference();
+      renderHistory();
+      updateClipDuration();
+
+      // 設置事件監聽器
+      clipForm.addEventListener('submit', handleFormSubmit);
+      previewBtn.addEventListener('click', togglePreview);
+      darkModeToggle.addEventListener('click', toggleDarkMode);
+      historyBtn.addEventListener('click', toggleHistoryPanel);
+      closeHistory.addEventListener('click', closeHistoryPanel);
+      overlay.addEventListener('click', closeHistoryPanel);
+
+      // 時間輸入自動格式化和驗證
+      startTimeInput.addEventListener('input', handleTimeInput);
+      endTimeInput.addEventListener('input', handleTimeInput);
+      startTimeInput.addEventListener('blur', formatTimeInput);
+      endTimeInput.addEventListener('blur', formatTimeInput);
+
+      // 計算切割時長
+      startTimeInput.addEventListener('input', updateClipDuration);
+      endTimeInput.addEventListener('input', updateClipDuration);
+
+      // URL驗證
+      videoUrlInput.addEventListener('input', validateYoutubeUrl);
+      videoUrlInput.addEventListener('blur', validateYoutubeUrl);
+    }
+
+    // 表單提交處理
+    async function handleFormSubmit(e) {
       e.preventDefault();
       const payload = {
-        video_url: document.getElementById('video_url').value.trim(),
-        start_time: document.getElementById('start_time').value.trim(),
-        end_time: document.getElementById('end_time').value.trim()
+        video_url: videoUrlInput.value.trim(),
+        start_time: startTimeInput.value.trim(),
+        end_time: endTimeInput.value.trim()
       };
       
-      if (!payload.video_url || !payload.start_time || !payload.end_time) {
-        updateStatus('請填入所有欄位！', 'error');
+      if (!validateForm()) {
         return;
       }
       
@@ -333,6 +900,9 @@
       updateStatus('正在提交請求，請稍候...', 'info');
 
       try {
+        // 模擬進度更新
+        startProgressSimulation();
+
         const res = await fetch('/submit_job', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -343,13 +913,227 @@
         if (!res.ok) throw new Error(data.message || '提交失敗');
 
         updateStatus(data.message || '正在處理您的影片...', 'info');
+        
+        // 添加到歷史記錄
+        addToHistory(payload, data.job_id);
+        
+        // 開始輪詢工作狀態
         pollJobStatus(data.job_id);
       } catch (err) {
+        clearInterval(progressInterval);
         updateStatus('提交失敗：' + err.message, 'error');
         submitButton.disabled = false;
       }
-    });
+    }
 
+    // 表單驗證
+    function validateForm() {
+      let isValid = true;
+      
+      // 驗證URL
+      if (!validateYoutubeUrl()) {
+        isValid = false;
+      }
+      
+      // 驗證時間格式
+      if (!validateTimeFormat(startTimeInput.value)) {
+        startFeedback.textContent = '時間格式無效，請使用 mm:ss 或 hh:mm:ss 格式';
+        startFeedback.className = 'format-feedback format-invalid';
+        isValid = false;
+      }
+      
+      if (!validateTimeFormat(endTimeInput.value)) {
+        endFeedback.textContent = '時間格式無效，請使用 mm:ss 或 hh:mm:ss 格式';
+        endFeedback.className = 'format-feedback format-invalid';
+        isValid = false;
+      }
+      
+      // 驗證時間順序
+      if (isValid && compareTimestamps(startTimeInput.value, endTimeInput.value) >= 0) {
+        endFeedback.textContent = '結束時間必須晚於開始時間';
+        endFeedback.className = 'format-feedback format-invalid';
+        isValid = false;
+      }
+      
+      return isValid;
+    }
+
+    // Youtube URL 驗證
+    function validateYoutubeUrl() {
+      const url = videoUrlInput.value.trim();
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      
+      if (!url) {
+        urlFeedback.textContent = '請輸入 YouTube 網址';
+        urlFeedback.className = 'format-feedback format-invalid';
+        return false;
+      }
+      
+      if (!youtubeRegex.test(url)) {
+        urlFeedback.textContent = '請輸入有效的 YouTube 影片網址';
+        urlFeedback.className = 'format-feedback format-invalid';
+        return false;
+      }
+      
+      urlFeedback.textContent = '網址格式有效';
+      urlFeedback.className = 'format-feedback format-valid';
+      return true;
+    }
+
+    // 時間格式驗證和處理
+    function handleTimeInput(e) {
+      const input = e.target;
+      const feedbackEl = input.id === 'start_time' ? startFeedback : endFeedback;
+      
+      // 允許輸入數字、冒號和退格鍵
+      const val = input.value;
+      
+      if (val.length === 0) {
+        feedbackEl.textContent = '';
+        feedbackEl.className = 'format-feedback';
+        return;
+      }
+      
+      if (validateTimeFormat(val)) {
+        feedbackEl.textContent = '時間格式有效';
+        feedbackEl.className = 'format-feedback format-valid';
+      } else {
+        feedbackEl.textContent = '請使用 mm:ss 或 hh:mm:ss 格式';
+        feedbackEl.className = 'format-feedback';
+      }
+    }
+
+    // 格式化時間輸入
+    function formatTimeInput(e) {
+      const input = e.target;
+      const val = input.value.trim();
+      
+      if (!val) return;
+      
+      // 嘗試將輸入格式化為有效的時間格式
+      const timeRegex = /^(\d+):(\d+)(?::(\d+))?$/;
+      const match = val.match(timeRegex);
+      
+      if (match) {
+        let hours = 0, minutes = 0, seconds = 0;
+        
+        if (match[3]) { // hh:mm:ss 格式
+          hours = parseInt(match[1]);
+          minutes = parseInt(match[2]);
+          seconds = parseInt(match[3]);
+        } else { // mm:ss 格式
+          minutes = parseInt(match[1]);
+          seconds = parseInt(match[2]);
+        }
+        
+        // 標準化時間值 (處理溢出)
+        minutes += Math.floor(seconds / 60);
+        seconds %= 60;
+        hours += Math.floor(minutes / 60);
+        minutes %= 60;
+        
+        // 格式化輸出
+        if (hours > 0) {
+          input.value = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        } else {
+          input.value = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+      }
+      
+      validateTimeFormat(input.value);
+      updateClipDuration();
+    }
+
+    // 驗證時間格式
+    function validateTimeFormat(timeStr) {
+      const timeRegex = /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
+      return timeRegex.test(timeStr);
+    }
+
+    // 計算時間戳的秒數
+    function timestampToSeconds(timestamp) {
+      const parts = timestamp.split(':').map(Number);
+      let seconds = 0;
+      
+      if (parts.length === 3) { // hh:mm:ss
+        seconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+      } else if (parts.length === 2) { // mm:ss
+        seconds = parts[0] * 60 + parts[1];
+      }
+      
+      return seconds;
+    }
+
+    // 比較兩個時間戳
+    function compareTimestamps(start, end) {
+      return timestampToSeconds(start) - timestampToSeconds(end);
+    }
+
+    // 秒數轉換為時間格式
+    function secondsToTimestamp(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      
+      if (hours > 0) {
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }
+      return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // 更新剪輯時長顯示
+    function updateClipDuration() {
+      const startTime = startTimeInput.value.trim();
+      const endTime = endTimeInput.value.trim();
+      
+      if (validateTimeFormat(startTime) && validateTimeFormat(endTime)) {
+        const startSeconds = timestampToSeconds(startTime);
+        const endSeconds = timestampToSeconds(endTime);
+        
+        if (endSeconds > startSeconds) {
+          const durationSeconds = endSeconds - startSeconds;
+          clipDurationSpan.textContent = secondsToTimestamp(durationSeconds);
+        } else {
+          clipDurationSpan.textContent = '00:00';
+        }
+      } else {
+        clipDurationSpan.textContent = '計算中...';
+      }
+    }
+
+    // 預覽影片
+    function togglePreview() {
+      const videoUrl = videoUrlInput.value.trim();
+      
+      if (!validateYoutubeUrl()) {
+        updateStatus('請輸入有效的 YouTube 影片網址', 'error');
+        return;
+      }
+      
+      // 從網址中提取影片ID
+      const videoIdMatch = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (!videoIdMatch) {
+        updateStatus('無法從網址中獲取影片ID', 'error');
+        return;
+      }
+      
+      const videoId = videoIdMatch[1];
+      const startTime = validateTimeFormat(startTimeInput.value) ? timestampToSeconds(startTimeInput.value) : 0;
+      
+      if (videoPreview.style.display === 'none' || videoPreview.style.display === '') {
+        // 顯示預覽
+        videoPreview.src = `https://www.youtube.com/embed/${videoId}?start=${startTime}&autoplay=1`;
+        videoPreview.style.display = 'block';
+        previewBtn.textContent = '關閉預覽';
+      } else {
+        // 隱藏預覽
+        videoPreview.src = '';
+        videoPreview.style.display = 'none';
+        previewBtn.textContent = '預覽影片';
+      }
+    }
+
+    // 輪詢工作狀態
     function pollJobStatus(jobId) {
       if (jobPollingInterval) clearInterval(jobPollingInterval);
       
@@ -360,38 +1144,241 @@
           
           if (!res.ok) throw new Error(data.message || '查詢失敗');
           
+          // 更新進度條
+          if (data.progress) {
+            processingProgress = parseFloat(data.progress);
+            updateProgressBar(processingProgress);
+          }
+          
           updateStatus(data.message, data.status === 'processing' ? 'info'
                                                                 : (data.status === 'completed' ? 'success' : 'error'));
 
           if (data.status !== 'processing') {
             clearInterval(jobPollingInterval);
+            clearInterval(progressInterval);
             submitButton.disabled = false;
 
             if (data.status === 'completed' && data.filename) {
+              // 更新歷史記錄狀態
+              updateHistoryStatus(jobId, 'completed', data.filename);
+              
               const link = document.createElement('a');
               link.href = `/download/${encodeURIComponent(data.filename)}`;
               link.textContent = `下載切割後的影片`;
               link.download = data.filename;
               link.style.display = 'inline-block';
               link.style.marginTop = '12px';
+              link.className = 'download-link';
               statusMessageDiv.appendChild(link);
+            } else if (data.status === 'failed') {
+              updateHistoryStatus(jobId, 'failed');
             }
           }
         } catch (err) {
           updateStatus('輪詢錯誤：' + err.message, 'error');
           clearInterval(jobPollingInterval);
+          clearInterval(progressInterval);
           submitButton.disabled = false;
         }
       }, 4000);
     }
 
+    // 模擬進度
+    function startProgressSimulation() {
+      processingProgress = 0;
+      updateProgressBar(0);
+      
+      // 添加進度條到狀態消息區域
+      if (!document.querySelector('.progress-container')) {
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'progress-container';
+        
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        progressBar.id = 'progressBar';
+        
+        progressContainer.appendChild(progressBar);
+        statusMessageDiv.appendChild(progressContainer);
+      }
+      
+      // 模擬進度增加
+      progressInterval = setInterval(() => {
+        if (processingProgress < 90) {
+          // 模擬非線性進度增加 (開始快，後來慢)
+          const increment = (90 - processingProgress) * 0.1;
+          processingProgress += increment > 0.5 ? increment : 0.5;
+          updateProgressBar(processingProgress);
+        }
+      }, 1000);
+    }
+
+    // 更新進度條
+    function updateProgressBar(percentage) {
+      const progressBar = document.getElementById('progressBar');
+      if (progressBar) {
+        progressBar.style.width = `${Math.min(percentage, 100)}%`;
+      }
+    }
+
+    // 更新狀態消息
     function updateStatus(msg, type) {
+      // 保留下載鏈接
+      const downloadLink = statusMessageDiv.querySelector('.download-link');
+      
       statusMessageDiv.textContent = msg;
       statusMessageDiv.className = type || '';
+      
+      // 如果之前有進度條，保留它
+      if (document.querySelector('.progress-container')) {
+        const progressContainer = document.querySelector('.progress-container');
+        statusMessageDiv.appendChild(progressContainer);
+      }
+      
+      // 如果之前有下載鏈接，恢復它
+      if (downloadLink) {
+        statusMessageDiv.appendChild(downloadLink);
+      }
+      
       statusMessageDiv.style.animation = 'none';
       statusMessageDiv.offsetHeight; // 觸發重繪
       statusMessageDiv.style.animation = 'fadeIn 0.3s ease';
     }
+
+    // 切換深色模式
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+      
+      // 更新圖標
+      darkModeToggle.innerHTML = isDarkMode ? '☀️ <span class="tooltiptext">切換淺色模式</span>' 
+                                             : '🌙 <span class="tooltiptext">切換深色模式</span>';
+    }
+
+    // 加載深色模式偏好
+    function loadDarkModePreference() {
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.innerHTML = '☀️ <span class="tooltiptext">切換淺色模式</span>';
+      }
+    }
+
+    // 切換歷史面板
+    function toggleHistoryPanel() {
+      historyPanel.classList.toggle('open');
+      overlay.classList.toggle('visible');
+    }
+
+    // 關閉歷史面板
+    function closeHistoryPanel() {
+      historyPanel.classList.remove('open');
+      overlay.classList.remove('visible');
+    }
+
+    // 添加到歷史記錄
+    function addToHistory(clipData, jobId) {
+      const historyItem = {
+        id: jobId,
+        videoUrl: clipData.video_url,
+        startTime: clipData.start_time,
+        endTime: clipData.end_time,
+        timestamp: new Date().toISOString(),
+        status: 'processing',
+        filename: null
+      };
+      
+      history.unshift(historyItem);
+      
+      // 限制歷史記錄數量
+      if (history.length > 20) {
+        history = history.slice(0, 20);
+      }
+      
+      saveHistory();
+      renderHistory();
+    }
+
+    // 更新歷史記錄狀態
+    function updateHistoryStatus(jobId, status, filename = null) {
+      const itemIndex = history.findIndex(item => item.id === jobId);
+      if (itemIndex !== -1) {
+        history[itemIndex].status = status;
+        if (filename) {
+          history[itemIndex].filename = filename;
+        }
+        saveHistory();
+        renderHistory();
+      }
+    }
+
+    // 保存歷史記錄
+    function saveHistory() {
+      localStorage.setItem('clipHistory', JSON.stringify(history));
+    }
+
+    // 渲染歷史記錄
+    function renderHistory() {
+      historyItems.innerHTML = '';
+      
+      if (history.length === 0) {
+        historyItems.innerHTML = '<div class="history-empty">暫無剪輯歷史</div>';
+        return;
+      }
+      
+      history.forEach(item => {
+        const videoIdMatch = item.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        const videoId = videoIdMatch ? videoIdMatch[1] : '';
+        
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        
+        const date = new Date(item.timestamp);
+        const formattedDate = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        
+        let statusText = '處理中';
+        let statusClass = 'processing';
+        
+        if (item.status === 'completed') {
+          statusText = '已完成';
+          statusClass = 'completed';
+        } else if (item.status === 'failed') {
+          statusText = '處理失敗';
+          statusClass = 'failed';
+        }
+        
+        historyItem.innerHTML = `
+          <h3 title="${item.videoUrl}">YouTube 片段</h3>
+          <div class="history-meta">
+            <span>${item.startTime} - ${item.endTime}</span>
+            <span class="status ${statusClass}">${statusText}</span>
+          </div>
+          <div class="history-meta">
+            <span>${formattedDate}</span>
+          </div>
+          <div class="history-actions">
+            <button class="history-btn load-btn" data-url="${item.videoUrl}" data-start="${item.startTime}" data-end="${item.endTime}">載入設定</button>
+            ${item.status === 'completed' ? `<a href="/download/${encodeURIComponent(item.filename)}" class="history-btn download-btn" download="${item.filename}">下載</a>` : ''}
+          </div>
+        `;
+        
+        historyItems.appendChild(historyItem);
+        
+        // 添加載入按鈕事件
+        const loadBtn = historyItem.querySelector('.load-btn');
+        loadBtn.addEventListener('click', function() {
+          videoUrlInput.value = this.dataset.url;
+          startTimeInput.value = this.dataset.start;
+          endTimeInput.value = this.dataset.end;
+          closeHistoryPanel();
+          validateYoutubeUrl();
+          updateClipDuration();
+        });
+      });
+    }
+
+    // 頁面加載時初始化
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
